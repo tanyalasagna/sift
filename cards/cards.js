@@ -415,6 +415,13 @@
                 </button>
               </div>
               <div class="nav-dots" id="nav-dots" aria-hidden="true"></div>
+              <button class="ctrl-dismiss-btn" id="ctrl-close-btn">
+                <svg class="ctrl-dismiss-x" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span class="ctrl-dismiss-label">I don't need Sift today</span>
+              </button>
             </div>
 
           </div>
@@ -427,17 +434,6 @@
                   <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
                 </svg>
               </span>
-              <span class="ctrl-edit-label">customize your sift</span>
-            </button>
-            <button class="ctrl-dismiss-btn" id="ctrl-close-btn">
-              <span class="ctrl-dismiss-icon-wrap">
-                <svg class="ctrl-dismiss-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                  <line x1="8.5" y1="8.5" x2="15.5" y2="15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <line x1="15.5" y1="8.5" x2="8.5" y2="15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <span class="ctrl-dismiss-label">I don't need Sift today</span>
             </button>
 
           </div>
