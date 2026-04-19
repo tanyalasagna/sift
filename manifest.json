@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Sift",
+  "version": "2.0.0",
+  "description": "Reflection prompts at checkout to help you shop more intentionally.",
+
+  "permissions": ["activeTab", "storage", "tabs"],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.hm.com/*"],
+      "js": [
+        "utils/storage.js",
+        "utils/checkout-detection.js",
+        "cards/cards.js",
+        "exit/exit.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Sift"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "cards/cards.css",
+        "exit/exit.css",
+        "prompts/prompts.json",
+        "history.html"
+      ],
+      "matches": ["*://*.hm.com/*"]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "money": [
+    {
+      "id": "M1",
+      "prompt": "If you found this haul in a thrift store for half the price, would you be just as excited?"
+    },
+    {
+      "id": "M2",
+      "prompt": "Does this cart feel like an investment in yourself, or a temporary fix?"
+    },
+    {
+      "id": "M3",
+      "prompt": "If you had the cash equivalent of this cart in your hand right now, would you still trade it for these clothes?"
+    },
+    {
+      "id": "M4",
+      "prompt": "Think of your most-loved piece. Does this haul even come close?"
+    }
+  ],
+  "space": [
+    {
+      "id": "S1",
+      "prompt": "Can you picture exactly which hangers or drawer dividers are currently empty and waiting for this?"
+    },
+    {
+      "id": "S2",
+      "prompt": "Is your closet a curated collection or just...crowded? Where does this addition fit in?"
+    },
+    {
+      "id": "S3",
+      "prompt": "If you had to get rid of an equal number of items to make room for this cart, what would be the first to go?"
+    },
+    {
+      "id": "S4",
+      "prompt": "Picture your next laundry day. Are you giving your future self a lot more work?"
+    }
+  ],
+  "need": [
+    {
+      "id": "N1",
+      "prompt": "If you couldn't wear this for two weeks, would you still be excited for it to arrive?"
+    },
+    {
+      "id": "N2",
+      "prompt": "If you couldn't post a photo in these, would they still be in your cart?"
+    },
+    {
+      "id": "N3",
+      "prompt": "Does this haul solve a nothing-to-wear problem?"
+    },
+    {
+      "id": "N4",
+      "prompt": "If this cart disappeared and you had to find every item again, would you bother?"
+    }
+  ]
+}

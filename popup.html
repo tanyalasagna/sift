@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sift</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 260px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #faf9f6;
+      color: #1a1a2e;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid #e5e0d8;
+    }
+
+    .wordmark {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #1a1a2e;
+    }
+
+    .wordmark em { color: #4caf7d; font-style: normal; }
+
+    .hm-badge {
+      font-size: 10px;
+      font-weight: 600;
+      color: #9ca3af;
+      background: #f0ede8;
+      border-radius: 6px;
+      padding: 3px 7px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .section { padding: 14px 16px; }
+    .section + .section { border-top: 1px solid #f0ede8; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+
+    .pillar-list { display: flex; flex-direction: column; gap: 7px; }
+
+    .pillar-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #e5e0d8;
+      background: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a2e;
+      transition: border-color 0.18s, background 0.18s;
+      text-align: left;
+      width: 100%;
+    }
+
+    .pillar-toggle.on { border-color: var(--ac); background: var(--al); }
+    .pillar-toggle.on .dot { background: var(--ac); }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e5e0d8;
+      flex-shrink: 0;
+      transition: background 0.18s;
+    }
+
+    .pillar-name { flex: 1; }
+    .pillar-hint { font-size: 11px; font-weight: 400; color: #9ca3af; }
+
+    .footer-note {
+      padding: 12px 16px;
+      font-size: 11px;
+      color: #c0bab2;
+      font-style: italic;
+      border-top: 1px solid #f0ede8;
+      text-align: center;
+    }
+
+    .reset-link {
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      color: #c0bab2;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 0;
+      text-decoration: underline;
+      text-decoration-color: #e5e0d8;
+      margin-top: 6px;
+    }
+    .reset-link:hover { color: #9ca3af; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="wordmark">Sift<em>.</em></div>
+    <div class="hm-badge">H&amp;M</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Gut-check lenses</div>
+    <div class="pillar-list" id="pillar-list">
+      <!-- populated by popup.js -->
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Changes take effect at your next checkout.
+    <button class="reset-link" id="reset-onboarding">Reset onboarding</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
