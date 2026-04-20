@@ -416,10 +416,6 @@
               </div>
               <div class="nav-dots" id="nav-dots" aria-hidden="true"></div>
               <button class="ctrl-dismiss-btn" id="ctrl-close-btn">
-                <svg class="ctrl-dismiss-x" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
                 <span class="ctrl-dismiss-label">I don't need Sift today</span>
               </button>
             </div>
@@ -558,7 +554,7 @@
           holdTimer = setTimeout(() => {
             saved = true;
 
-            // ── Saved state ──────────────────────────────
+            // Step 1: Save confirmation
             label.textContent = 'Sift saved ✓';
 
             // Subtle scale pulse
@@ -566,9 +562,33 @@
             btn.style.transform  = 'scale(1.06)';
             setTimeout(() => { btn.style.transform = 'scale(1)'; }, 150);
 
-            // ── Slow dismiss after 1.5s confirmation ─────
+            // Step 2: Trigger tuck-away after 1.5s confirmation window
             setTimeout(() => {
-              dismiss(null, 900); // 900ms — noticeably slower than the usual 300ms
+
+              // Restore scroll before animating out
+              document.documentElement.style.overflow = origHtmlOverflow;
+              document.body.style.overflow            = origBodyOverflow;
+              document.body.style.paddingRight        = origBodyPadding;
+
+              document.removeEventListener('keydown', onModalEsc, { capture: true });
+              document.removeEventListener('keydown', onKeyDown);
+
+              const TUCK_MS = 520;
+
+              // Step 2: Tuck toward top-right corner (extension toolbar)
+              layout.style.transition     = `transform ${TUCK_MS}ms cubic-bezier(0.36, 0, 0.66, -0.56), opacity ${TUCK_MS}ms ease`;
+              layout.style.transform      = 'translateX(80vw) translateY(calc(-50% - 40vh)) scale(0.08)';
+              layout.style.opacity        = '0';
+              btnOverlay.style.transition = `opacity ${TUCK_MS}ms ease`;
+              btnOverlay.style.opacity    = '0';
+              backdrop.classList.remove('visible');
+
+              // Steps 3 + 4 + 5: After animation fully completes, close UI then open history
+              setTimeout(() => {
+                host.remove();
+                window.open(chrome.runtime.getURL('history.html'));
+              }, TUCK_MS + 20);
+
             }, 1500);
 
           }, 2000);
@@ -606,6 +626,9 @@
       ctrlColEl.style.opacity       = '0';
       ctrlColEl.style.transform     = 'translateY(10px)';
       ctrlColEl.style.pointerEvents = 'none';
+      skipBtn.style.opacity         = '0';
+      skipBtn.style.transform       = 'translateY(8px)';
+      skipBtn.style.pointerEvents   = 'none';
 
       // Phase 1 — T=0ms
       requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -649,13 +672,27 @@
               navWrapEl.style.pointerEvents = '';
             }, 1100);
 
-            // Edit/Close — T=1800ms
+            // Customize button — T=1800ms
             setTimeout(() => {
               ctrlColEl.style.transition    = 'opacity 320ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)';
               ctrlColEl.style.opacity       = '1';
               ctrlColEl.style.transform     = 'translateY(0)';
               ctrlColEl.style.pointerEvents = '';
             }, 1400);
+
+            // "I don't need Sift today" — T=2100ms (last)
+            setTimeout(() => {
+              skipBtn.style.transition  = 'opacity 320ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)';
+              skipBtn.style.opacity     = '1';
+              skipBtn.style.transform   = 'translateY(0)';
+              // Clean up inline styles after transition so .edit-open class can override
+              setTimeout(() => {
+                skipBtn.style.opacity       = '';
+                skipBtn.style.transform     = '';
+                skipBtn.style.transition    = '';
+                skipBtn.style.pointerEvents = '';
+              }, 340);
+            }, 1700);
           }));
         }, 100); // 300 + 100 = T=400ms
 
