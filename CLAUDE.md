@@ -285,7 +285,48 @@ Action button states (`.outro-action-btn`):
 
 ---
 
-## What's Next (Session 10)
+## Session 10 Recap
+
+### "I don't need Sift today" Dismiss Link
+- X icon removed — label only
+- Color changed from Stone (`#d4c4b0`) → Espresso (`#5c3d2e`); weight `400` → `600`; size `12px` → `16px`
+- Hover: underline (no opacity fade); `text-underline-offset: 3px`
+- `margin-top: 16px` added for extra breathing room below pagination dots
+
+### Entrance Animation Sequence (updated)
+- `skipBtn` (dismiss link) now starts hidden (`opacity:0`, `translateY(8px)`, `pointer-events:none`) and fades in **last** in the stagger sequence
+- Order: loader → cards → nav arrows (T≈1500ms) → Customize button (T≈1800ms) → dismiss link (T≈2100ms)
+- Inline styles on `skipBtn` are cleaned up after the 320ms transition so `.edit-open` class can still override opacity correctly
+
+### Customize (Edit) Button
+- Shape: `border-radius: 50%` → `8px` (rounded square, matching nav arrows)
+- Dimensions: `padding: 10px`, icon-wrap `26×26` → `padding: 12px`, icon-wrap `32×32` (identical footprint to nav arrow buttons)
+- Fill: Terracotta (`#b05538`) background, `1.5px solid #b05538` border
+- Icon: Parchment (`#f5ede4`) pencil via `currentColor`
+- 3D shadow edge: `#7a3521` (dark Terracotta, matching active nav arrows)
+
+### Hold-to-Save Exit Sequence (reworked)
+- Removed `dismiss(null, 900)` slow-exit path
+- New strict sequence after 2s hold completes:
+  1. Label snaps to "Sift saved ✓" + scale pulse (confirmation window: 1.5s)
+  2. Scroll restored; keyboard listeners removed; tuck-away animation fires — layout flies to top-right (`translateX(80vw) translateY(calc(-50% - 40vh)) scale(0.08)`) over 520ms with `cubic-bezier(0.36, 0, 0.66, -0.56)`
+  3. Animation fully completes
+  4. `host.remove()` — overlay closed, focus returns to shopping tab
+  5. `window.open(chrome.runtime.getURL('history.html'))` — history opens in new tab
+
+---
+
+## Session 11 Recap
+
+### Outro Card Copy — Conditional by Flow
+- `outroCardHTML(hasTyped)` now gates copy on the `hasTyped` flag
+- **Hold to Save flow** (`hasTyped === true`): only the wordmark row + "That's it! The call is yours." removed — card shows wordmark + action button only (clean, no purchase messaging)
+- **Exit Sift flow** (`hasTyped === false`): full copy retained — "That's it! The call is yours.", "If you go through with this purchase,", and the "cherish it ♥" row all render as before
+- Change is in `outroCardHTML()` in `cards/cards.js` — both body paragraphs and the cherish row are wrapped in a single `!hasTyped` conditional template literal
+
+---
+
+## What's Next (Session 12)
 
 - **"I've decided" proceed CTA** — button to complete flow and proceed to checkout (distinct from dismiss which exits Sift without proceeding)
 - **Front card micro-interactions** — hover lift, card flip animation
