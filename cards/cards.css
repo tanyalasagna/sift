@@ -425,6 +425,7 @@
 .gear-backdrop.visible {
   pointer-events: auto;
   opacity: 1;
+  backdrop-filter: blur(6px);
 }
 
 /* ── Settings popover card ─────────────────────────────────────── */
