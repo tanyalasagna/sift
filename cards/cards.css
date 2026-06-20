@@ -345,6 +345,7 @@
 /* ── Edit button ─────────────────────────────────────────────── */
 
 .ctrl-edit-btn {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -363,6 +364,28 @@
   opacity: 0.9;
   transform: translateY(2px);
   box-shadow: 0 0px 0 #7a3521, 0 1px 2px rgba(0,0,0,0.12);
+}
+
+.ctrl-edit-tooltip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #f5ede4;
+  color: #5c3d2e;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ctrl-edit-btn:hover .ctrl-edit-tooltip {
+  opacity: 1;
 }
 
 .ctrl-edit-icon-wrap {
@@ -428,7 +451,7 @@
 
 .gear-pop-title {
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   color: #5c3d2e;
   line-height: 1.3;
@@ -436,7 +459,7 @@
 
 .gear-pop-sub {
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 300;
   color: #5c3d2e;
   line-height: 1.3;
