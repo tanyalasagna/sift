@@ -480,13 +480,18 @@
       shadow.appendChild(root);
 
       // ── Position button overlay exactly over the checkout button ──
-      const btnRect    = checkoutBtn.getBoundingClientRect();
       const btnOverlay = shadow.getElementById('sift-btn-overlay');
-      btnOverlay.style.top          = `${btnRect.top}px`;
-      btnOverlay.style.left         = `${btnRect.left}px`;
-      btnOverlay.style.width        = `${btnRect.width}px`;
-      btnOverlay.style.height       = `${btnRect.height}px`;
       btnOverlay.style.borderRadius = window.getComputedStyle(checkoutBtn).borderRadius || '4px';
+
+      function positionOverlay() {
+        const r = checkoutBtn.getBoundingClientRect();
+        btnOverlay.style.top    = `${r.top}px`;
+        btnOverlay.style.left   = `${r.left}px`;
+        btnOverlay.style.width  = `${r.width}px`;
+        btnOverlay.style.height = `${r.height}px`;
+      }
+      positionOverlay();
+      window.addEventListener('resize', positionOverlay);
 
       const backdrop      = shadow.getElementById('sift-backdrop');
       const layout        = shadow.getElementById('sift-layout');
@@ -514,6 +519,7 @@
         document.body.style.overflow            = origBodyOverflow;
         document.body.style.paddingRight        = origBodyPadding;
 
+        window.removeEventListener('resize', positionOverlay);
         layout.style.transition     = `transform ${durationMs}ms cubic-bezier(0.4, 0, 1, 1), opacity ${durationMs}ms ease`;
         layout.style.transform      = 'translateX(-100%) translateY(-50%)';
         layout.style.opacity        = '0';

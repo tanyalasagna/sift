@@ -42,7 +42,7 @@
 
 .sift-btn-overlay {
   position: fixed;
-  border: 3px solid transparent;
+  border: 1.5px solid transparent;
   background:
     linear-gradient(135deg, #9e4a30, #b05538, #c0603e, #b05538, #9e4a30) padding-box,
     linear-gradient(135deg, #e8c88d, #a8b99a, #c49a8a, #e8c88d, #e8c88d) border-box;
