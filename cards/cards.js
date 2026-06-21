@@ -382,6 +382,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
+            <span class="sift-topbar-tooltip" aria-hidden="true">exit sift</span>
           </button>
         </div>
 
@@ -424,9 +425,6 @@
                 </button>
               </div>
               <div class="nav-dots" id="nav-dots" aria-hidden="true"></div>
-              <button class="ctrl-dismiss-btn" id="ctrl-close-btn">
-                <span class="ctrl-dismiss-label">I don't need Sift today</span>
-              </button>
             </div>
 
           </div>
@@ -509,7 +507,6 @@
       const navWrapEl     = shadow.getElementById('nav-wrap');
       const ctrlColEl     = shadow.getElementById('ctrl-col');
       const editBtn       = shadow.getElementById('ctrl-edit-btn');
-      const skipBtn       = shadow.getElementById('ctrl-close-btn');
       const gearPop       = shadow.getElementById('gear-popover');
       const gearBackdrop  = shadow.getElementById('gear-backdrop');
       const bounceEl      = shadow.getElementById('bounce-dots');
@@ -642,9 +639,6 @@
       ctrlColEl.style.opacity       = '0';
       ctrlColEl.style.transform     = 'translateY(10px)';
       ctrlColEl.style.pointerEvents = 'none';
-      skipBtn.style.opacity         = '0';
-      skipBtn.style.transform       = 'translateY(8px)';
-      skipBtn.style.pointerEvents   = 'none';
 
       // Phase 1 — T=0ms
       requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -696,19 +690,6 @@
               ctrlColEl.style.pointerEvents = '';
             }, 1400);
 
-            // "I don't need Sift today" — T=2100ms (last)
-            setTimeout(() => {
-              skipBtn.style.transition  = 'opacity 320ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1)';
-              skipBtn.style.opacity     = '1';
-              skipBtn.style.transform   = 'translateY(0)';
-              // Clean up inline styles after transition so .edit-open class can override
-              setTimeout(() => {
-                skipBtn.style.opacity       = '';
-                skipBtn.style.transform     = '';
-                skipBtn.style.transition    = '';
-                skipBtn.style.pointerEvents = '';
-              }, 340);
-            }, 1700);
           }));
         }, 100); // 300 + 100 = T=400ms
 
@@ -725,7 +706,6 @@
         btnOverlay.classList.remove('is-shaking');
       });
 
-      // ── "I don't need Sift today" → dismiss modal ────────────
       let showDismissModal = false;
 
       function closeDismissModal() {
@@ -738,15 +718,9 @@
         gearPop.classList.remove('visible');
         gearBackdrop.classList.remove('visible');
         editBtn.setAttribute('aria-expanded', 'false');
-        skipBtn.classList.remove('edit-open');
       }
 
-      skipBtn.addEventListener('click', () => {
-        showDismissModal = true;
-        dismissModal.classList.add('visible');
-      });
-
-      shadow.getElementById('sift-topbar-close').addEventListener('click', () => {
+      root.querySelector('#sift-topbar-close').addEventListener('click', () => {
         showDismissModal = true;
         dismissModal.classList.add('visible');
       });
@@ -769,7 +743,6 @@
         gearPop.classList.toggle('visible', gearOpen);
         gearBackdrop.classList.toggle('visible', gearOpen);
         editBtn.setAttribute('aria-expanded', String(gearOpen));
-        skipBtn.classList.toggle('edit-open', gearOpen);
       });
 
       // Backdrop click: clicking outside the card closes the gear modal.
