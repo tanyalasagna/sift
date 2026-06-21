@@ -110,7 +110,7 @@
         <div class="intro-corner intro-corner-br"></div>
         <div class="intro-content">
           <p class="intro-wordmark">sift.</p>
-          <p class="intro-body">You picked some <span class="intro-highlight c-need w1">things</span> <span class="intro-highlight c-need w2">to</span> <span class="intro-highlight c-money w3">think</span> <span class="intro-highlight c-space w4">about</span> when you set up <span class="intro-wavy">Sift</span>. Here they are.</p>
+          <p class="intro-body">You picked some <span class="intro-highlight c-need w1">things</span> <span class="intro-highlight c-need w2">to</span> <span class="intro-highlight c-money w3">think</span> <span class="intro-highlight c-space w4">about</span> when you set up <span class="intro-wavy">Sift.</span> Here they are.</p>
           <p class="intro-hint">Shuffle through, take your time, and jot down some thoughts.</p>
         </div>
       </div>`;
@@ -334,7 +334,7 @@
         const link = document.createElement('link');
         link.id   = 'sift-fonts';
         link.rel  = 'stylesheet';
-        link.href = 'https://fonts.googleapis.com/css2?family=Happy+Monkey&family=Geist:wght@300;400;600;700;900&family=Geist+Mono:wght@600&display=swap';
+        link.href = 'https://fonts.googleapis.com/css2?family=Happy+Monkey&family=Geist:wght@300;400;600;700;900&family=Geist+Mono:wght@400;600&display=swap';
         document.head.appendChild(link);
       }
 

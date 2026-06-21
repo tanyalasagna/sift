@@ -135,6 +135,12 @@
   100% { background-position: 0% 50%; }
 }
 
+@keyframes card-border-shift {
+  0%   { background-position: 0 0, 0% 50%; }
+  50%  { background-position: 0 0, 100% 50%; }
+  100% { background-position: 0 0, 0% 50%; }
+}
+
 .sift-btn-overlay.visible {
   opacity: 1;
   transform: scale(1);
@@ -320,8 +326,12 @@
 
 .dismiss-modal-card {
   width: 480px;
-  background: #f5ede4;
-  border: 3px dashed #d4c4b0;
+  border: 2.5px solid transparent;
+  background:
+    linear-gradient(#f5ede4, #f5ede4) padding-box,
+    linear-gradient(135deg, #b05538, #5c3d2e, #b05538, #5c3d2e) border-box;
+  background-size: auto, 300% 300%;
+  animation: card-border-shift 6s ease-in-out infinite;
   border-radius: 20px;
   padding: 28px;
   display: flex;
@@ -480,8 +490,12 @@
 .gear-popover {
   width: 480px;
   max-width: calc(100vw - 4rem);
-  background: #f5ede4;
-  border: 3px dashed #d4c4b0;
+  border: 2.5px solid transparent;
+  background:
+    linear-gradient(#f5ede4, #f5ede4) padding-box,
+    linear-gradient(135deg, #b05538, #5c3d2e, #b05538, #5c3d2e) border-box;
+  background-size: auto, 300% 300%;
+  animation: card-border-shift 6s ease-in-out infinite;
   border-radius: 20px;
   padding: 28px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.10);
@@ -679,8 +693,12 @@
    Phase 2 adds .fanned which transitions each to its depth-offset position.
    transition-delay is set inline in applyFan() for the staggered entrance. */
 .back-card {
-  background: var(--back-bg);
-  border: 2px dashed #d4c4b0;
+  border: 2.5px solid transparent;
+  background:
+    linear-gradient(var(--back-bg), var(--back-bg)) padding-box,
+    linear-gradient(135deg, #b05538, #5c3d2e, #b05538, #5c3d2e) border-box;
+  background-size: auto, 300% 300%;
+  animation: card-border-shift 6s ease-in-out infinite;
   transform: translateX(0) translateY(0) rotate(0deg);
   transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -781,11 +799,6 @@
   to   { background-size: 100% 100%; }
 }
 
-/* Underline draw animation */
-@keyframes line-draw {
-  from { background-size: 0% 2px; }
-  to   { background-size: 100% 2px; }
-}
 
 /* Background-color swipe highlights */
 .intro-highlight {
@@ -808,17 +821,15 @@
 .intro-highlight.w3 { animation-delay: 1.0s; }
 .intro-highlight.w4 { animation-delay: 1.4s; }
 
-/* Straight underline draw for "Sift" */
+/* 'Sift' in Happy Monkey, sized to match surrounding Geist 16px baseline */
 .intro-wavy {
   display: inline;
-  font-weight: 600;
-  background-image: linear-gradient(#b05538, #b05538);
-  background-repeat: no-repeat;
-  background-position: left bottom;
-  background-size: 0% 2px;
-  padding-bottom: 3px;
-  animation: line-draw 0.5s ease forwards;
-  animation-delay: 1.85s;
+  font-family: 'Happy Monkey', cursive;
+  font-size: 19px;
+  font-weight: 700;
+  color: #b05538;
+  line-height: inherit;
+  vertical-align: baseline;
 }
 
 /* ── Last / outro card ─────────────────────────────────────── */
@@ -1016,8 +1027,12 @@
    All three pillar types share this single set of rules. */
 
 .prompt-card {
-  background: var(--pillar-bg);
-  border: 3px dashed #d4c4b0;
+  border: 2.5px solid transparent;
+  background:
+    linear-gradient(var(--pillar-bg), var(--pillar-bg)) padding-box,
+    linear-gradient(135deg, #b05538, #5c3d2e, #b05538, #5c3d2e) border-box;
+  background-size: auto, 300% 300%;
+  animation: card-border-shift 6s ease-in-out infinite;
 }
 
 .prompt-parchment {
@@ -1088,7 +1103,9 @@
   background: #f5ede4;
   font-family: 'Geist Mono', 'Courier New', monospace;
   font-size: 14px;
+  font-weight: 400;
   color: #5c3d2e;
+  text-transform: lowercase;
   resize: none;
   outline: none;
   line-height: 1.5;
@@ -1096,8 +1113,10 @@
 }
 
 .prompt-input::placeholder {
-  color: var(--pillar-bg);
-  text-transform: uppercase;
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-weight: 400;
+  color: #5c3d2e;
+  text-transform: lowercase;
 }
 
 .prompt-input:focus {
@@ -1285,8 +1304,10 @@
   border: 1.5px solid #e5e0d8;
   border-radius: 10px;
   font-size: 18px;
-  font-family: inherit;
-  color: #1a1a2e;
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-weight: 400;
+  color: #5c3d2e;
+  text-transform: lowercase;
   background: #fff;
   outline: none;
   resize: none;
@@ -1297,7 +1318,13 @@
 }
 
 .card-input:focus { border-color: var(--accent, #4caf7d); }
-.card-input::placeholder { color: #c0bab2; font-style: italic; }
+.card-input::placeholder {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-weight: 400;
+  color: #5c3d2e;
+  text-transform: lowercase;
+  font-style: normal;
+}
 
 .card-footer-note {
   font-size: 15px;
