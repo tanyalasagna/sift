@@ -326,7 +326,29 @@ Action button states (`.outro-action-btn`):
 
 ---
 
-## What's Next (Session 12)
+## Session 12 Recap
+
+### Top Banner Replaces "I Don't Need Sift Today" Link
+- Added `.sift-topbar` — a fixed, full-width 64px banner pinned to the viewport top with an animated terracotta gradient (`sift-breathe`) and a × close button (`.sift-topbar-close`), hover tooltip "Exit sift"
+- Removed the standalone "I don't need Sift today" control-column dismiss link entirely (markup, JS refs, fade-in stagger logic) — dismissal is now triggered from the topbar × only, which opens the same dismiss modal
+- Z-index reshuffle to keep the topbar above everything: topbar `z-index: 200`, gear popover `50 → 300`, dismiss modal `100 → 400`
+
+### Button Overlay Resize Handling
+- Checkout button overlay positioning extracted into `positionOverlay()`, called on `window.resize` and cleaned up via `removeEventListener` on dismiss — overlay no longer drifts out of alignment if the page reflows
+- Overlay border thinned `3px → 1.5px`
+
+### Animated Gradient Borders — Visual Cohesion Pass
+- New `card-border-shift` keyframe (terracotta/espresso diagonal gradient, 6s loop) applied via `border: 2.5px solid transparent` + double `background` (padding-box fill, border-box gradient) to: dismiss modal, gear popover, back cards, and prompt cards — replaces the old static dashed-Stone borders on those elements
+- Intro card highlight words (`.intro-highlight`) reworked from bold colored text to animated background-swipe fills, staggered `w1`–`w4` (0.2s/0.6s/1.0s/1.4s delays, 0.4s ease swipe)
+- "Sift" in the intro copy settled on a static Happy Monkey-styled span (an intermediate underline-draw animation was tried and reverted in the same session)
+
+### Input/Placeholder Styling Unified
+- All textarea/input text and placeholders (`.prompt-input`, `.card-input`) switched from uppercase/pillar-colored/italic to lowercase Geist Mono, Espresso (`#5c3d2e`) — consistent with the rest of the card system
+- Google Fonts request now includes Geist Mono weight 400 (previously only 600) to support the new lowercase regular-weight text
+
+---
+
+## What's Next (Session 13)
 
 - **"I've decided" proceed CTA** — button to complete flow and proceed to checkout (distinct from dismiss which exits Sift without proceeding)
 - **Front card micro-interactions** — hover lift, card flip animation
