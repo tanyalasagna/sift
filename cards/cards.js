@@ -423,6 +423,14 @@
                     <path d="M6 9h6V5l7 7-7 7v-4H6V9z"/>
                   </svg>
                 </button>
+                <button class="nav-arrow-btn nav-grid-btn" id="nav-grid-btn" aria-label="Grid view">
+                  <svg viewBox="0 0 24 24" fill="#b05538" stroke="#b05538" stroke-width="1" aria-hidden="true">
+                    <rect x="4" y="1" width="7" height="10" rx="1.5"/>
+                    <rect x="13" y="1" width="7" height="10" rx="1.5"/>
+                    <rect x="4" y="13" width="7" height="10" rx="1.5"/>
+                    <rect x="13" y="13" width="7" height="10" rx="1.5"/>
+                  </svg>
+                </button>
               </div>
               <div class="nav-dots" id="nav-dots" aria-hidden="true"></div>
             </div>
@@ -478,8 +486,8 @@
         <!-- Dismiss modal — shown when "I don't need Sift today" is clicked -->
         <div class="dismiss-modal" id="dismiss-modal" role="dialog" aria-modal="true" aria-labelledby="dismiss-headline">
           <div class="dismiss-modal-card">
-            <p class="dismiss-headline" id="dismiss-headline">That's okay!</p>
-            <p class="dismiss-body">Love an intentional purchase! If you've thought it through and it feels right, it's all yours.</p>
+            <p class="dismiss-headline" id="dismiss-headline">Don't need Sift today?</p>
+            <p class="dismiss-body">Whether it's a gift or a much-needed staple, here is to an intentional purchase.</p>
             <p class="dismiss-body">If you change your mind, you can always wake Sift back up from your browser's toolbar.</p>
             <button class="dismiss-got-it-btn" id="dismiss-got-it-btn">Got it</button>
           </div>
