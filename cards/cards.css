@@ -1176,6 +1176,9 @@
 
 /* Grid View button — Parchment fill, Terracotta border/icon (no click logic yet) */
 .nav-grid-btn {
+  position: relative;
+  overflow: visible;
+  margin-left: 10px;
   background: #f5ede4;
   border: 1.5px solid #b05538;
   box-shadow: 0 2px 0 #d4c4b0, 0 3px 6px rgba(0,0,0,0.18), 0 1px 2px rgba(0,0,0,0.12);
@@ -1183,6 +1186,28 @@
 
 .nav-grid-btn:active {
   box-shadow: 0 0px 0 #d4c4b0, 0 1px 2px rgba(0,0,0,0.12);
+}
+
+.nav-grid-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f5ede4;
+  color: #5c3d2e;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.nav-grid-btn:hover .nav-grid-tooltip {
+  opacity: 1;
 }
 
 

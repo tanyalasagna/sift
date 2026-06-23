@@ -430,6 +430,7 @@
                     <rect x="4" y="13" width="7" height="10" rx="1.5"/>
                     <rect x="13" y="13" width="7" height="10" rx="1.5"/>
                   </svg>
+                  <span class="nav-grid-tooltip" aria-hidden="true">View all cards</span>
                 </button>
               </div>
               <div class="nav-dots" id="nav-dots" aria-hidden="true"></div>
@@ -457,7 +458,7 @@
           <div class="gear-popover" id="gear-popover">
             <div class="gear-pop-header">
               <p class="gear-pop-title">What's on your mind?</p>
-              <p class="gear-pop-sub">Pick what you care about</p>
+              <p class="gear-pop-sub">What feels most important for this purchase?</p>
             </div>
             <div class="gear-pillar-grid">
               ${Object.entries(PILLAR_META).map(([pid, meta]) => `
