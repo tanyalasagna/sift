@@ -1,0 +1,457 @@
+@import url('https://fonts.googleapis.com/css2?family=Happy+Monkey&family=Geist:wght@300;400;600;700;900&family=Geist+Mono:wght@400;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --parchment: #f5ede4;
+  --stone: #d4c4b0;
+  --terracotta: #b05538;
+  --espresso: #5c3d2e;
+  --money: #e8c88d;
+  --space: #a8b99a;
+  --need: #c49a8a;
+  --wireframe-gray: #bbb;
+  --wireframe-light: #e8e0d6;
+}
+
+body {
+  background: var(--parchment);
+  color: var(--espresso);
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+
+.header {
+  padding: 48px 40px 32px;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.header-logo {
+  font-family: 'Happy Monkey', cursive;
+  font-size: 32px;
+  color: var(--terracotta);
+  margin-bottom: 24px;
+}
+
+.header-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--espresso);
+}
+
+.header-sub {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--espresso);
+  opacity: 0.7;
+}
+
+.search-wrap {
+  position: relative;
+  margin-top: 24px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--stone);
+  pointer-events: none;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border: 1.5px dashed var(--stone);
+  border-radius: 10px;
+  background: transparent;
+  font-size: 14px;
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-weight: 400;
+  color: var(--espresso);
+  outline: none;
+  transition: border-color 0.2s ease, border-style 0.2s ease;
+}
+
+.search-bar::placeholder {
+  color: var(--stone);
+  text-transform: lowercase;
+}
+
+.search-bar:focus {
+  border-color: var(--terracotta);
+  border-style: solid;
+}
+
+/* ── Pillar filter chips ─────────────────────────────────── */
+
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.filter-chip {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--espresso);
+  transition: opacity 0.15s ease, transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-chip[data-pillar="money"] { border: 1.5px dashed var(--money); }
+.filter-chip[data-pillar="space"] { border: 1.5px dashed var(--space); }
+.filter-chip[data-pillar="need"]  { border: 1.5px dashed var(--need); }
+
+.filter-chip.active[data-pillar="money"] { background: var(--money); border-style: solid; }
+.filter-chip.active[data-pillar="space"] { background: var(--space); border-style: solid; color: #fff; }
+.filter-chip.active[data-pillar="need"]  { background: var(--need);  border-style: solid; color: var(--parchment); }
+
+.filter-chip:hover { opacity: 0.85; }
+.filter-chip:active { transform: translateY(1px); }
+
+/* ── Sift entries ────────────────────────────────────────── */
+
+.entries {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.entries.filtering {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.entries-empty {
+  text-align: center;
+  padding: 48px 0;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--espresso);
+  opacity: 0.6;
+}
+
+@keyframes entry-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes card-border-shift {
+  0%   { background-position: 0 0, 0% 50%; }
+  50%  { background-position: 0 0, 100% 50%; }
+  100% { background-position: 0 0, 0% 50%; }
+}
+
+.entry-card {
+  border: 1.5px dashed var(--stone);
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+  background: transparent;
+  opacity: 0;
+  animation: entry-fade-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.entry-card:hover,
+.entry-card.open {
+  opacity: 1;
+  border: 2.5px solid transparent;
+  background:
+    linear-gradient(var(--parchment), var(--parchment)) padding-box,
+    linear-gradient(135deg, var(--terracotta), var(--espresso), var(--terracotta), var(--espresso)) border-box;
+  background-size: auto, 300% 300%;
+  animation: card-border-shift 6s ease-in-out infinite;
+  transform: translateY(-2px);
+}
+
+.entry-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.entry-left {
+  flex: 1;
+}
+
+.entry-date {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.entry-site {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--espresso);
+  margin-bottom: 10px;
+}
+
+.entry-pillars {
+  display: flex;
+  gap: 6px;
+}
+
+.pillar-tag {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  color: var(--espresso);
+}
+
+.pillar-tag.money { background: var(--money); }
+.pillar-tag.space { background: var(--space); color: #fff; }
+.pillar-tag.need { background: var(--need); color: var(--parchment); }
+
+.entry-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.entry-arrow {
+  font-size: 18px;
+  color: var(--stone);
+  transition: transform 0.25s ease;
+}
+
+.entry-card.open .entry-arrow {
+  transform: rotate(180deg);
+}
+
+/* Expanded content */
+.entry-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  padding-top: 0;
+}
+
+.entry-card.open .entry-details {
+  max-height: 800px;
+  padding-top: 24px;
+}
+
+.entry-details-inner {
+  border-top: 1px dashed var(--stone);
+  padding-top: 24px;
+  display: flex;
+  gap: 24px;
+}
+
+/* Product placeholders */
+.entry-products {
+  flex: 0 0 200px;
+}
+
+.entry-products-label {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--stone);
+  margin-bottom: 12px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.product-placeholder {
+  position: relative;
+  aspect-ratio: 3/4;
+  border: 2px dashed var(--wireframe-gray);
+  border-radius: 8px;
+  background: var(--wireframe-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.product-placeholder svg {
+  width: 24px;
+  height: 24px;
+  color: var(--stone);
+  opacity: 0.7;
+}
+
+.product-placeholder.has-photo {
+  border: none;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.product-placeholder.has-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-price {
+  position: relative;
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--espresso);
+}
+
+.product-placeholder.has-photo .product-price {
+  background: var(--parchment);
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin: 6px 6px 2px;
+}
+
+.product-credit {
+  position: relative;
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 8px;
+  color: var(--parchment);
+  text-decoration: none;
+  background: rgba(92, 61, 46, 0.55);
+  padding: 1px 6px 3px;
+  border-radius: 6px;
+  margin: 0 6px 6px;
+  align-self: flex-start;
+}
+
+.product-credit:hover {
+  text-decoration: underline;
+}
+
+.product-total {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--stone);
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.product-total-label {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.product-total-amount {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--espresso);
+}
+
+/* Reflections */
+.entry-reflections {
+  flex: 1;
+}
+
+.entry-reflections-label {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--stone);
+  margin-bottom: 12px;
+}
+
+.reflection-item {
+  margin-bottom: 16px;
+  padding-left: 16px;
+  border-left: 3px solid var(--stone);
+}
+
+.reflection-item:last-child { margin-bottom: 0; }
+
+.reflection-item.money { border-color: var(--money); }
+.reflection-item.space { border-color: var(--space); }
+.reflection-item.need { border-color: var(--need); }
+
+.reflection-prompt {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--stone);
+  margin-bottom: 4px;
+}
+
+.reflection-response {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--espresso);
+  line-height: 1.5;
+}
+
+.no-reflections {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--stone);
+  font-style: italic;
+  padding: 16px 0;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+
+.footer {
+  text-align: center;
+  padding: 24px 40px 48px;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.footer-count {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--stone);
+}
+
+.footer-text {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--stone);
+  letter-spacing: 0.5px;
+  margin-top: 6px;
+}
+
+.footer-logo {
+  font-family: 'Happy Monkey', cursive;
+  font-size: 16px;
+  color: var(--terracotta);
+  margin-top: 8px;
+}

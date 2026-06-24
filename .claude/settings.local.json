@@ -3,7 +3,10 @@
     "allow": [
       "mcp__figma-desktop__get_design_context",
       "Bash(node --check cards/cards.js)",
-      "Bash(sips *)"
+      "Bash(sips *)",
+      "Bash(node drive4.js)",
+      "Bash(curl -s \"https://unsplash.com/napi/search/photos?query=clothing&per_page=12\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -s \"https://api.unsplash.com/photos/random?query=garment&count=3&client_id=ed12Yf5m7_nfTW-wxQPf32gDNBgEhusF0AYQDm57u5Y\")"
     ]
   }
 }
