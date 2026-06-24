@@ -413,16 +413,21 @@
                 <div class="stack-wrap" id="stack-wrap"></div>
               </div>
               <div class="nav-wrap" id="nav-wrap">
-                <button class="nav-arrow-btn" id="nav-back-btn" aria-label="Previous card" disabled>
-                  <svg viewBox="0 0 24 24" fill="#f5ede4" aria-hidden="true">
-                    <path d="M18 15h-6v4l-7-7 7-7v4h6v6z"/>
-                  </svg>
-                </button>
-                <button class="nav-arrow-btn" id="nav-next-btn" aria-label="Next card">
-                  <svg viewBox="0 0 24 24" fill="#f5ede4" aria-hidden="true">
-                    <path d="M6 9h6V5l7 7-7 7v-4H6V9z"/>
-                  </svg>
-                </button>
+                <div class="nav-arrows-col">
+                  <div class="nav-arrows-row">
+                    <button class="nav-arrow-btn" id="nav-back-btn" aria-label="Previous card" disabled>
+                      <svg viewBox="0 0 24 24" fill="#f5ede4" aria-hidden="true">
+                        <path d="M18 15h-6v4l-7-7 7-7v4h6v6z"/>
+                      </svg>
+                    </button>
+                    <button class="nav-arrow-btn" id="nav-next-btn" aria-label="Next card">
+                      <svg viewBox="0 0 24 24" fill="#f5ede4" aria-hidden="true">
+                        <path d="M6 9h6V5l7 7-7 7v-4H6V9z"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="nav-dots" id="nav-dots" aria-hidden="true"></div>
+                </div>
                 <button class="nav-arrow-btn nav-grid-btn" id="nav-grid-btn" aria-label="Grid view">
                   <svg viewBox="0 0 24 24" fill="#b05538" stroke="#b05538" stroke-width="1" aria-hidden="true">
                     <rect x="4" y="1" width="7" height="10" rx="1.5"/>
@@ -433,7 +438,6 @@
                   <span class="nav-grid-tooltip" aria-hidden="true">View all cards</span>
                 </button>
               </div>
-              <div class="nav-dots" id="nav-dots" aria-hidden="true"></div>
             </div>
 
           </div>
@@ -813,6 +817,8 @@
       const dotsEl = shadow.getElementById('nav-dots');
 
       const SVG_NEXT = `<svg viewBox="0 0 24 24" fill="#f5ede4" aria-hidden="true"><path d="M6 9h6V5l7 7-7 7v-4H6V9z"/></svg>`;
+      const SVG_REFRESH = `<svg viewBox="0 0 24 24" fill="none" stroke="#f5ede4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.4M21 12a9 9 0 0 1-15.5 6.4"/><path d="M18.5 2.5v4.5h-4.5M5.5 21.5v-4.5h4.5"/></svg>`;
+      const FLIP_START_LABEL = `${SVG_REFRESH}<span class="nav-flip-label">Flip to start</span>`;
 
       function updateNavDots() {
         const onBookend = currentDeckIndex === 0 || currentDeckIndex === deck.length - 1;
@@ -832,10 +838,15 @@
         backBtn.disabled = currentDeckIndex === 0;
 
         const isLast = currentDeckIndex === deck.length - 1;
-        nextBtn.disabled = isLast;
-        nextBtn.classList.remove('nav-restart');
-        nextBtn.setAttribute('aria-label', 'Next card');
-        nextBtn.innerHTML = SVG_NEXT;
+        nextBtn.disabled = false;
+        nextBtn.classList.toggle('nav-flip-start', isLast);
+        if (isLast) {
+          nextBtn.setAttribute('aria-label', 'Flip to start');
+          nextBtn.innerHTML = FLIP_START_LABEL;
+        } else {
+          nextBtn.setAttribute('aria-label', 'Next card');
+          nextBtn.innerHTML = SVG_NEXT;
+        }
 
         updateNavDots();
       }
@@ -894,7 +905,13 @@
       }
 
       backBtn.addEventListener('click', () => navigateTo(currentDeckIndex - 1, -1));
-      nextBtn.addEventListener('click', () => navigateTo(currentDeckIndex + 1, 1));
+      nextBtn.addEventListener('click', () => {
+        if (currentDeckIndex === deck.length - 1) {
+          navigateTo(0, -1);
+        } else {
+          navigateTo(currentDeckIndex + 1, 1);
+        }
+      });
 
       // ── Keyboard navigation ───────────────────────────────────
       // Guard: skip if focus is inside a textarea or input so arrow keys

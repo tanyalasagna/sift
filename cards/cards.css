@@ -1128,9 +1128,22 @@
 .nav-wrap {
   margin-top: 20px;
   display: flex;
+  align-items: flex-start;
   justify-content: center;
   gap: 10px;
   width: 100%;
+}
+
+.nav-arrows-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-arrows-row {
+  display: flex;
+  gap: 10px;
 }
 
 .nav-arrow-btn {
@@ -1174,6 +1187,30 @@
   flex-shrink: 0;
 }
 
+/* "Flip to start" state — replaces the Next arrow on the last card.
+   Auto width so it can fit the icon + label without affecting the
+   square arrow buttons; the flex row absorbs the extra width and
+   pushes the Grid View button right via gap, no overlap. */
+.nav-flip-start {
+  width: auto;
+  padding: 12px 16px;
+  gap: 8px;
+}
+
+.nav-flip-start svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-flip-label {
+  font-family: 'Geist Mono', 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f5ede4;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 /* Grid View button — Parchment fill, Terracotta border/icon (no click logic yet) */
 .nav-grid-btn {
   position: relative;
@@ -1213,7 +1250,6 @@
 
 
 .nav-dots {
-  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
