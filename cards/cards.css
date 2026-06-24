@@ -51,6 +51,30 @@
 
 .sift-topbar-close:hover  { opacity: 0.7; }
 
+/* Centered slot for the relocated "Sifting" label when Grid View is active.
+   Absolute + centered independently of the close button's flex flow so the
+   close button never shifts. */
+.sift-topbar-sifting-slot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* Cancel the absolute overlay positioning .btn-done-row uses inside
+   .sift-btn-overlay so it lays out as plain centered content in the topbar,
+   with no leftover background/border from its original context. */
+.btn-done-row.in-topbar {
+  position: static;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
 .sift-topbar-tooltip {
   position: absolute;
   right: calc(100% + 10px);
@@ -461,6 +485,114 @@
   display: block;
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Grid view ───────────────────────────────────────────────── */
+/* Full-screen, centered overview of every card. Sits below the topbar
+   (z-index 200) but above the backdrop/panel (z-index:auto). */
+
+.sift-grid-view {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms ease;
+  z-index: 150;
+}
+
+.sift-grid-view.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.grid-ctrl-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Icon-only — Parchment fill + Terracotta border/icon, same inverted
+   treatment as .nav-grid-btn. Padding/border-radius/shadow magnitudes match
+   .ctrl-edit-btn so it sits flush with the Edit button next to it. */
+.grid-back-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1.5px solid #b05538;
+  background: #f5ede4;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 2px 0 #d4c4b0, 0 3px 6px rgba(0,0,0,0.18), 0 1px 2px rgba(0,0,0,0.12);
+  transition: opacity 0.15s ease, transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.grid-back-btn:hover  { opacity: 0.9; }
+.grid-back-btn:active {
+  opacity: 0.9;
+  transform: translateY(2px);
+  box-shadow: 0 0px 0 #d4c4b0, 0 1px 2px rgba(0,0,0,0.12);
+}
+
+.grid-back-btn svg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+/* Tooltip reuses .sift-topbar-tooltip verbatim (same styling/positioning/
+   transition as the close button's tooltip) — this rule only adds the
+   hover trigger for this button. */
+.grid-back-btn:hover .sift-topbar-tooltip {
+  opacity: 1;
+}
+
+/* Grid-view-only tooltip placement swaps. Edit sits first in the row,
+   Back-to-deck second — each tooltip is flipped to open outward, away from
+   its neighbor, rather than the default direction tuned for their normal
+   homes (.ctrl-edit-tooltip opens right beside the deck-view panel;
+   .sift-topbar-tooltip opens left beside the topbar's right-pinned close
+   button). Scoped to this row/button, so .ctrl-edit-tooltip reverts to its
+   default the moment the Edit button is moved back into #ctrl-col. */
+.grid-back-btn .sift-topbar-tooltip {
+  right: auto;
+  left: calc(100% + 10px);
+}
+
+.grid-ctrl-row .ctrl-edit-tooltip {
+  left: auto;
+  right: calc(100% + 10px);
+}
+
+/* Cards laid out in normal flow (not the stacked/absolute positioning used
+   in the single-card deck) so they sit side by side without overlapping.
+   flex-shrink:0 keeps them full-size; overflow-x:auto handles the rest. */
+.grid-cards-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  overflow-x: auto;
+  padding: 12px 5vw 24px;
+}
+
+.grid-cards-row .card {
+  position: relative;
   flex-shrink: 0;
 }
 

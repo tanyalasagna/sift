@@ -145,11 +145,11 @@
 
   function outroCardHTML(hasTyped) {
     const actionBtn = hasTyped
-      ? `<button class="outro-action-btn outro-save-btn" id="outro-action-btn">
+      ? `<button class="outro-action-btn outro-save-btn">
            <span class="outro-btn-fill"></span>
            <span class="outro-btn-label">Hold to save responses</span>
          </button>`
-      : `<button class="outro-action-btn outro-exit-btn" id="outro-action-btn">Exit Sift</button>`;
+      : `<button class="outro-action-btn outro-exit-btn">Exit Sift</button>`;
     return `
       <div class="outro-parchment">
         <div class="outro-corner outro-corner-tl"></div>
@@ -378,6 +378,7 @@
 
         <!-- Top banner: fixed to viewport top, × opens dismiss modal -->
         <div class="sift-topbar" id="sift-topbar">
+          <div class="sift-topbar-sifting-slot" id="sift-topbar-sifting-slot" aria-hidden="true"></div>
           <button class="sift-topbar-close" id="sift-topbar-close" aria-label="Close Sift">
             <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 6L6 18M6 6l12 12"/>
@@ -457,6 +458,21 @@
 
         </div>
 
+        <!-- Grid view: all cards laid out in a scrollable row, toggled via the Grid View nav button -->
+        <div class="sift-grid-view" id="sift-grid-view">
+          <div class="grid-ctrl-row" id="grid-ctrl-row">
+            <button class="grid-back-btn" id="grid-back-btn" aria-label="Back to deck view">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="10" y="2" width="10" height="14" rx="1.5" stroke="#b05538" stroke-width="1.5"/>
+                <rect x="7" y="5" width="10" height="14" rx="1.5" stroke="#b05538" stroke-width="1.5"/>
+                <rect x="4" y="8" width="10" height="14" rx="1.5" fill="#b05538" stroke="#b05538" stroke-width="1.5"/>
+              </svg>
+              <span class="sift-topbar-tooltip" aria-hidden="true">Back to deck view</span>
+            </button>
+          </div>
+          <div class="grid-cards-row" id="grid-cards-row"></div>
+        </div>
+
         <!-- Gear modal — full-screen backdrop + centered popover card -->
         <div class="gear-backdrop" id="gear-backdrop" role="dialog" aria-modal="true" aria-label="Gut-check settings">
           <div class="gear-popover" id="gear-popover">
@@ -526,6 +542,12 @@
       const doneEl        = shadow.getElementById('btn-done-row');
       const dismissModal  = shadow.getElementById('dismiss-modal');
       const gotItBtn      = shadow.getElementById('dismiss-got-it-btn');
+      const topbarSiftSlot = shadow.getElementById('sift-topbar-sifting-slot');
+      const gridViewEl    = shadow.getElementById('sift-grid-view');
+      const gridCtrlRow   = shadow.getElementById('grid-ctrl-row');
+      const gridCardsRow  = shadow.getElementById('grid-cards-row');
+      const gridBackBtn   = shadow.getElementById('grid-back-btn');
+      const navGridBtn    = shadow.getElementById('nav-grid-btn');
 
       let currentDeckIndex = 0;
       const cardAnswers    = { need: ['', '', '', ''], money: ['', '', '', ''], space: ['', '', '', ''] };
@@ -544,15 +566,17 @@
         layout.style.opacity        = '0';
         btnOverlay.style.transition = `opacity ${durationMs}ms ease`;
         btnOverlay.style.opacity    = '0';
+        gridViewEl.style.transition = `opacity ${durationMs}ms ease`;
+        gridViewEl.style.opacity    = '0';
         backdrop.classList.remove('visible');
         document.removeEventListener('keydown', onModalEsc, { capture: true });
         setTimeout(() => { host.remove(); cb?.(); }, durationMs + 20);
       }
 
-      // Attach the correct click handler to the outro card's action button.
-      // Called after every renderStack() so the button is always wired up.
-      function wireOutroBtn() {
-        const btn = stackEl.querySelector('#outro-action-btn');
+      // Attach the correct click handler to an outro card's action button.
+      // Called after every renderStack() (deck view) and renderGridCards()
+      // (grid view) so whichever outro card is in play stays wired up.
+      function wireOutroBtn(btn) {
         if (!btn) return;
 
         if (btn.classList.contains('outro-exit-btn')) {
@@ -607,6 +631,8 @@
               layout.style.opacity        = '0';
               btnOverlay.style.transition = `opacity ${TUCK_MS}ms ease`;
               btnOverlay.style.opacity    = '0';
+              gridViewEl.style.transition = `opacity ${TUCK_MS}ms ease`;
+              gridViewEl.style.opacity    = '0';
               backdrop.classList.remove('visible');
 
               // Steps 3 + 4 + 5: After animation fully completes, close UI then open history
@@ -666,7 +692,7 @@
         // Phase 3 — T=400ms (100ms after layout starts sliding in)
         setTimeout(() => {
           renderStack(stackEl, deck[currentDeckIndex], cardAnswers, currentPillars);
-          wireOutroBtn();
+          wireOutroBtn(stackEl.querySelector('.outro-action-btn'));
           updateNavButtons();
 
           stackEl.style.opacity   = '0';
@@ -803,8 +829,9 @@
           SiftStorage.setPillars(currentPillars);
           reshuffleStack(stackEl, deck, currentPillars, prompts, cardAnswers, () => {
             currentDeckIndex = 0;
-            wireOutroBtn();
+            wireOutroBtn(stackEl.querySelector('.outro-action-btn'));
             updateNavButtons();
+            if (gridViewEl.classList.contains('visible')) renderGridCards();
           });
         });
       });
@@ -851,6 +878,77 @@
         updateNavDots();
       }
 
+      // ── Grid view: all cards rendered full-size in a scrollable row ──
+
+      function hasTypedAnyAnswer() {
+        return Object.values(cardAnswers).some(arr => arr.some(v => v.trim() !== ''));
+      }
+
+      // Re-renders the grid's outro card only when its hasTyped-driven button
+      // (Exit Sift vs. Hold to save) needs to flip — called on every keystroke
+      // in any grid prompt card. Skips the rebuild when the state already
+      // matches so an in-progress hold-to-save press isn't reset mid-typing.
+      function refreshGridOutroCard() {
+        const outroCardEl = gridCardsRow.querySelector('.outro-card');
+        if (!outroCardEl) return;
+        const hasTyped  = hasTypedAnyAnswer();
+        const isSaveBtn = !!outroCardEl.querySelector('.outro-save-btn');
+        if (hasTyped === isSaveBtn) return;
+        outroCardEl.innerHTML = outroCardHTML(hasTyped);
+        wireOutroBtn(outroCardEl.querySelector('.outro-action-btn'));
+      }
+
+      // Builds one full-size, non-stacked .card per deck entry using the same
+      // HTML factories renderStack() uses for the front card.
+      function renderGridCards() {
+        gridCardsRow.innerHTML = '';
+        deck.forEach(cardSpec => {
+          const card = document.createElement('div');
+          if (cardSpec.type === 'outro') {
+            card.className = 'card outro-card';
+            card.innerHTML = outroCardHTML(hasTypedAnyAnswer());
+            wireOutroBtn(card.querySelector('.outro-action-btn'));
+          } else if (PILLAR_META[cardSpec.type]) {
+            const meta = PILLAR_META[cardSpec.type];
+            card.className = 'card prompt-card';
+            card.style.setProperty('--pillar-bg', meta.bg);
+            card.innerHTML = promptCardHTML(cardSpec.type, cardSpec.prompt);
+            const textarea = card.querySelector('.prompt-input');
+            textarea.value = cardAnswers[cardSpec.type][cardSpec.index] || '';
+            textarea.addEventListener('input', e => {
+              cardAnswers[cardSpec.type][cardSpec.index] = e.target.value;
+              refreshGridOutroCard();
+            });
+          } else {
+            card.className = 'card intro-card';
+            card.innerHTML = introCardHTML();
+          }
+          gridCardsRow.appendChild(card);
+        });
+      }
+
+      function enterGridView() {
+        topbarSiftSlot.appendChild(doneEl);
+        doneEl.classList.add('in-topbar');
+        gridCtrlRow.insertBefore(editBtn, gridCtrlRow.firstChild);
+        renderGridCards();
+        layout.style.display = 'none';
+        btnOverlay.style.display = 'none';
+        gridViewEl.classList.add('visible');
+      }
+
+      function exitGridView() {
+        gridViewEl.classList.remove('visible');
+        layout.style.display = '';
+        btnOverlay.style.display = '';
+        ctrlColEl.appendChild(editBtn);
+        doneEl.classList.remove('in-topbar');
+        btnOverlay.appendChild(doneEl);
+      }
+
+      navGridBtn.addEventListener('click', enterGridView);
+      gridBackBtn.addEventListener('click', exitGridView);
+
       // Physical deck animation.
       // direction:  1 = forward (Next), -1 = backward (Back)
       //
@@ -887,7 +985,7 @@
         // ── Rebuild deck with incoming card ──────────────────────
         currentDeckIndex = newIndex;
         renderStack(stackEl, deck[currentDeckIndex], cardAnswers, currentPillars);
-        wireOutroBtn();
+        wireOutroBtn(stackEl.querySelector('.outro-action-btn'));
         applyFan(stackEl, false);
         updateNavButtons();
 
@@ -917,6 +1015,7 @@
       // Guard: skip if focus is inside a textarea or input so arrow keys
       // still move the text cursor when the user is typing.
       function onKeyDown(e) {
+        if (gridViewEl.classList.contains('visible')) return;
         const tag = shadow.activeElement?.tagName?.toLowerCase();
         if (tag === 'textarea' || tag === 'input' || shadow.activeElement?.isContentEditable) return;
 
