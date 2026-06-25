@@ -19,6 +19,7 @@
   const SAMPLE_ENTRIES = [
     {
       date: 'April 14, 2026',
+      store: 'Zara',
       items: 4,
       pillars: ['money', 'need'],
       reflections: [
@@ -28,6 +29,7 @@
     },
     {
       date: 'April 8, 2026',
+      store: 'Target',
       items: 2,
       pillars: ['space'],
       reflections: [
@@ -36,12 +38,14 @@
     },
     {
       date: 'March 29, 2026',
+      store: 'Shein',
       items: 6,
       pillars: ['money', 'space', 'need'],
       reflections: [],
     },
     {
       date: 'March 22, 2026',
+      store: 'Uniqlo',
       items: 1,
       pillars: ['need'],
       reflections: [
@@ -50,6 +54,7 @@
     },
     {
       date: 'March 15, 2026',
+      store: 'Target',
       items: 1,
       pillars: ['money', 'need'],
       reflections: [
@@ -59,6 +64,7 @@
     },
     {
       date: 'March 3, 2026',
+      store: 'Zara',
       items: 3,
       pillars: ['space', 'need'],
       reflections: [
@@ -67,12 +73,14 @@
     },
     {
       date: 'February 18, 2026',
+      store: 'Uniqlo',
       items: 5,
       pillars: ['money'],
       reflections: [],
     },
     {
       date: 'February 2, 2026',
+      store: 'Shein',
       items: 2,
       pillars: ['space'],
       reflections: [
@@ -192,7 +200,7 @@
         <div class="entry-top">
           <div class="entry-left">
             <div class="entry-date">${entry.date}</div>
-            <div class="entry-site">H&amp;M — ${entry.items} item${entry.items === 1 ? '' : 's'}</div>
+            <div class="entry-site">${entry.store} — ${entry.items} item${entry.items === 1 ? '' : 's'}</div>
             <div class="entry-pillars">${pillarTags}</div>
           </div>
           <div class="entry-right">
@@ -225,7 +233,7 @@
     if (!searchTerm) return true;
     const haystack = [
       entry.date,
-      'h&m',
+      entry.store,
       ...entry.pillars.map((p) => PILLAR_LABEL[p]),
       ...entry.reflections.flatMap((r) => [r.prompt, r.response]),
     ]
